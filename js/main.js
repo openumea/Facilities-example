@@ -162,6 +162,17 @@
 			console.log("WTF IS : " + type + " typeof " + typeof type);
 		}
 		poly.setMap(map);
+
+		//Create a infowindow
+		var infowindow = new google.maps.InfoWindow({
+			content: name,
+			position: cords[0]
+		});
+
+		//Attatch infowindow to poly
+		google.maps.event.addListener(poly, 'click', function(event) {
+			infowindow.open(map);
+		});
 	}
 
 	//Build the map and everything in it

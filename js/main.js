@@ -8,9 +8,10 @@
 	var created_polygon = false;
 	function initialize() {
 		// Pan to a nice view over Umea
+		var umea = new google.maps.LatLng(63.825847,20.263035);
 		var mapOptions = {
 			zoom: 8,
-			center: new google.maps.LatLng(63.825847,20.263035),
+			center: umea,
 			mapTypeId: google.maps.MapTypeId.ROADMAP
 		};
 		map = new google.maps.Map(document.getElementById('map_canvas'), mapOptions);
@@ -164,7 +165,8 @@
 				strokeWeight: 2
 			});
 		} else {
-			console.log("WTF IS : " + type + " typeof " + typeof type);
+			//console.log("Unknown type : " + type + " typeof " + typeof type);
+			return;
 		}
 		poly.setMap(map);
 

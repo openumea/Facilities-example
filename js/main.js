@@ -30,16 +30,15 @@
 				if (typeof data === "string") {
 					data = JSON.parse(data);
 				}
-				var resources = data.result.resources;
-				var url = resources[0].url;
-				var created = new Date(resources[0].created);
-				for (var i=1; i < resources.length ; i+=1) {
-					var tmp_created = new Date(resources[i].created);
+				var url;
+				var created = new Date(0); // start on the start of time
+				data.result.resources.forEach(function(resource) {
+					var tmp_created = new Date(resource.created);
 					if (tmp_created > created) {
 						created = tmp_created;
-						url = resources[i].url;
+						url = resource.url;
 					}
-				}
+				});
 				if (url !== undefined) {
 					load_data(url);
 				} else {
@@ -144,10 +143,10 @@
 	function create_polygon(name, type, cords) {
 		var poly;
 		//convert cords to wsg84 for google maps
-		for (var a=0; a < cords.length ; a += 1) {
-			var geodetic = grid_to_geodetic(cords[a].lu_x, cords[a].lu_y);
-			cords[a] = new google.maps.LatLng(geodetic[0], geodetic[1]);
-		}
+		cords.forEach(function(cord, i, cords) {
+			var geodetic = grid_to_geodetic(cord.lu_x, cord.lu_y);
+			cords[i] = new google.maps.LatLng(geodetic[0], geodetic[1]);
+		});
 		if (type === "Polygon") {
 			poly = new google.maps.Polygon({
 				paths: cords,

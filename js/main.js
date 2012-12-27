@@ -56,30 +56,30 @@
 		var nodes = xml.childNodes[0];
 		var serializer = new XMLSerializer();
 
-		for (var i = 0; i < nodes.childNodes.length; i += 1) {
+		for (var i = 0; i < nodes.childNodes.length; i++) {
 			// We only know how to handle Facility-nodes
 			var f = nodes.childNodes[i];
 			if (f.tagName === "Facility") {
+				// Find these vars in the Facility-node to plot it.
 				var lu_x, lu_y, name;
-
-				for (var j = 0; j < f.childNodes.length ; j += 1) {
-					var n = f.childNodes[j];
+				for (var j = 0; j < f.childNodes.length ; j++) {
+					var ff = f.childNodes[j];
 					//Find and plot the thingie, if it has a position
-					if (n.tagName === "Name") {
-						name = n.textContent;
+					if (ff.tagName === "Name") {
+						name = ff.textContent;
 					}
-					if (n.tagName === "Coordinate") {
-						for (var k = 0; k < n.childNodes.length ; k += 1){
-							if (n.childNodes[k].tagName === "LU_X") {
-								lu_x = n.childNodes[k].textContent;
+					if (ff.tagName === "Coordinate") {
+						for (var k = 0; k < ff.childNodes.length ; k++){
+							if (ff.childNodes[k].tagName === "LU_X") {
+								lu_x = ff.childNodes[k].textContent;
 							}
-							if (n.childNodes[k].tagName === "LU_Y") {
-								lu_y = n.childNodes[k].textContent;
+							if (ff.childNodes[k].tagName === "LU_Y") {
+								lu_y = ff.childNodes[k].textContent;
 							}
 						}
 					}
 					// If it got more Polygons, plot them also
-					if (n.tagName === "Polygons" && n.childNodes.length > 1) {
+					if (ff.tagName === "Polygons") {
 						//<Polygon Name="Bjensjöns FVO" Type="Polygon">
 						//<Coordinates>
 						//<Coordinate LU_X="7074682,7689" LU_Y="138955,2227"/>
@@ -87,26 +87,30 @@
 						//<Polygon Name="Gimonäs 9 km" Type="Polyline">
 						//<Coordinates>
 						//<Coordinate LU_X="7076417,8288" LU_Y="154605,6126"/>
-						for (var b = 0; b < n.childNodes.length ; b += 1){
-							if (n.childNodes[b].tagName === "Polygon") {
-								var p = n.childNodes[b];
+						for (var l = 0; l < ff.childNodes.length ; l++){
+							var pp = ff.childNodes[l];
+							if (pp.tagName === "Polygon") {
 								var cordinates = [];
-								for (var l = 1 ; l < p.childNodes.length; l += 1){
-									if (p.childNodes[l].tagName === "Coordinates") {
-										var c = p.childNodes[l];
-										for (var m = 1 ; m < c.childNodes.length; m += 1){
-											if (c.childNodes[m].tagName === "Coordinate") {
-												var cord_attr = c.childNodes[m].attributes;
+								for (var m = 0; m < pp.childNodes.length; m++){
+									var co = pp.childNodes[m];
+									if (co.tagName === "Coordinates") {
+										for (var n = 0 ; n < co.childNodes.length; n++){
+											var cc = co.childNodes[n];
+											if (cc.tagName === "Coordinate") {
 												cordinates.push({
-													lu_x: parseFloat(cord_attr.LU_X.nodeValue),
-													lu_y: parseFloat(cord_attr.LU_Y.nodeValue)
+													lu_x: parseFloat(cc.attributes.LU_X.nodeValue),
+													lu_y: parseFloat(cc.attributes.LU_Y.nodeValue)
 												});
 											}
 										}
 									}
 								}
+								// If we found any enteties in the Polygons block, plot them
 								if (cordinates.length > 0) {
-									create_polygon(p.attributes.Name.nodeValue, p.attributes.Type.nodeValue, cordinates);
+									create_polygon(
+											pp.attributes.Name.nodeValue,
+											pp.attributes.Type.nodeValue,
+											cordinates);
 								}
 							}
 						}

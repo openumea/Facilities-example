@@ -1,4 +1,9 @@
+/*jshint browser:true, jquery:true, devel:true*/
+/*global google:true*/
+/*global swedish_params:true, grid_to_geodetic:true*/
+
 (function() {
+	"use strict";
 	var map;
 	var created_polygon = false;
 	function initialize() {

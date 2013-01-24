@@ -21,7 +21,7 @@
 	function plot_facilities() {
 		// First, figure out which file we should fetch
 		// Read the package-datastructure from ckan and pick out the newest resource in it.
-		var dataset = "anlaggningsdata";
+		var dataset = "recreational-facilities";
 		$.ajax({
 			url: "http://openumea.se/api/action/package_show",
 			type: "POST",

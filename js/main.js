@@ -51,9 +51,11 @@
 		$.ajax({ url: url, success: load_dots});
 	}
 	function load_dots(data, textStatus, jqXHR) {
-		//Parse the xml we got
-		var xml = $.parseXML(data);
-		var nodes = xml.childNodes[0];
+		//Parse the xml we got, if we need to.
+		if (typeof data === "string") {
+			data = $.parseXML(data);
+		}
+		var nodes = data.childNodes[0];
 		var serializer = new XMLSerializer();
 
 		for (var i = 0; i < nodes.childNodes.length; i++) {

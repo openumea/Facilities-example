@@ -25,7 +25,9 @@
 		$.ajax({
 			url: "http://openumea.se/api/action/package_show",
 			type: "POST",
+			contentType: "application/json; charset=utf-8",
 			data: JSON.stringify({id: dataset}),
+			dataType: "json",
 			success: function(data, textStatus, jqXHR) {
 				if (typeof data === "string") {
 					data = JSON.parse(data);
